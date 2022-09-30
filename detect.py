@@ -51,7 +51,7 @@ def detect(save_img=False):
     #add subfolder to sequences as source
     dataset_sources=[]
     for i in os.walk(source):
-        if i[0]=='/content/drive/MyDrive/Data/SR/':
+        if i[0]==source:
             continue
         subfolder_name=i[0].split('/')[-1].replace(' ', '_')
         dataset_sources.append(i[0])
@@ -128,8 +128,8 @@ def detect(save_img=False):
                     for c in det[:, -1].unique():
                         n = (det[:, -1] == c).sum()  # detections per class
                         s += f"{n} {names[int(c)]}{'s' * (n > 1)}, "  # add to string
-                        vals[names[int(c)]]= n
-                    stat_dict[img]=vals
+                        vals[names[int(c)]]= f"{n}"
+                    stat_dict[p.name]=vals
                     
                     # Write results
                     for *xyxy, conf, cls in reversed(det):
@@ -170,7 +170,7 @@ def detect(save_img=False):
                                 save_path += '.mp4'
                             vid_writer = cv2.VideoWriter(save_path, cv2.VideoWriter_fourcc(*'mp4v'), fps, (w, h))
                         vid_writer.write(im0)
-        with open(save_stats_path+'/stats_{}.txt'.format(source.split('/')[-1].replace(' ','_')), 'w') as stf:
+        with open(save_stats_path+'/stats_{}_{}.json'.format(subfolder_name, source.split('/')[-1].replace(' ','_')), 'w') as stf:
             json_object = json.dumps(stat_dict, indent=4)
             stf.write(json_object)
         if save_txt or save_img:
