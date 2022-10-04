@@ -58,6 +58,7 @@ def detect(save_img=False):
 
     for source in dataset_sources:
     # Set Dataloader
+        print ("Processing: "+source)
         vid_path, vid_writer = None, None
         if webcam:
             view_img = check_imshow()
@@ -170,7 +171,7 @@ def detect(save_img=False):
                                 save_path += '.mp4'
                             vid_writer = cv2.VideoWriter(save_path, cv2.VideoWriter_fourcc(*'mp4v'), fps, (w, h))
                         vid_writer.write(im0)
-        with open(save_stats_path+'/stats_{}_{}.json'.format(subfolder_name, source.split('/')[-1].replace(' ','_')), 'w') as stf:
+        with open(save_stats_path+'/stats_{}.json'.format(source.split('/')[-1].replace(' ','_')), 'w') as stf:
             json_object = json.dumps(stat_dict, indent=4)
             stf.write(json_object)
         if save_txt or save_img:
@@ -200,7 +201,7 @@ if __name__ == '__main__':
     parser.add_argument('--name', default='exp', help='save results to project/name')
     parser.add_argument('--exist-ok', action='store_true', help='existing project/name ok, do not increment')
     parser.add_argument('--no-trace', action='store_true', help='don`t trace model')
-    parser.add_argument('--save-stats-path', action='store_true', help='stores just the detection stats in json format')
+    parser.add_argument('--save-stats-path', type=str, default='inference/images', help='stores just the detection stats in json format')
     opt = parser.parse_args()
     print(opt)
     #check_requirements(exclude=('pycocotools', 'thop'))
